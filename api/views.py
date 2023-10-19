@@ -59,3 +59,16 @@ class Auth:
         )
         # user.save()
         return Response({"token": f"{user.email}:{user.password}"})
+
+    @staticmethod
+    @api_view(("POST",))
+    def login(request: WSGIRequest):
+        data = json.loads(request.body)
+
+        user = User.objects.filter(
+            email=data.get("email"), password=data.get("password")
+        ).first()
+        if user is None:
+            return Response({"error": "Користувач не знайден"})
+
+        return Response({"token": f"{user.email}:{user.password}"})
