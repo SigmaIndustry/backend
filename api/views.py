@@ -7,6 +7,8 @@ from rest_framework.response import Response
 
 from api.enums import CATEGORIES, SEX, ROLES
 from api.models import User
+from api.models import ServiceProvider
+from api.models import Service
 
 
 @api_view(("GET",))
@@ -69,6 +71,44 @@ class Auth:
             email=data.get("email"), password=data.get("password")
         ).first()
         if user is None:
-            return Response({"error": "Користувач не знайден"})
+            return Response({"error": "Користувача не знайдено"})
 
         return Response({"token": f"{user.email}:{user.password}"})
+
+    @staticmethod
+    @api_view(("POST",))
+    def register_service_provider(request: WSGIRequest):
+        data = json.loads(request.body)
+
+        service_provider = ServiceProvider(
+            user=data.get("user"),
+            business_name=data.get("business_name"),
+            description=data.get("description"),
+            phone_number=data.get("phone_number"),
+            city=data.get("city"),
+            work_time=data.get("work_time"),
+            reviews=data.get("reviews"),
+            created_at=data.get("created_at"),
+        )
+        service_provider.save()
+
+        return Response({"message": "Постачальника послуг зареєстровано успішно"})
+
+    @staticmethod
+    @api_view(("POST",))
+    def register_service(request: WSGIRequest):
+        data = json.loads(request.body)
+
+        service = Service(
+            name=data.get("name"),
+            pictures=data.get("pictures"),
+            description=data.get("description"),
+            price=data.get("price"),
+            category=data.get("category"),
+            provider=data.get("provider"),
+            reviews=data.get("reviews"),
+            created_at=data.get("created_at"),
+        )
+        service.save()
+
+        return Response({"message": "Послугy зареєстровано успішно"})
