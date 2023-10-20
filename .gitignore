@@ -28,4 +28,4 @@ coverage.xml
 docs/_build/
 
 db.sqlite3
-api/migrations/
+**/migrations/

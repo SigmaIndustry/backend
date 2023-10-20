@@ -1,19 +1,7 @@
 from django.db import models
 
-from api.enums import CATEGORIES, SEX, ROLES
-
-
-class User(models.Model):
-    email = models.EmailField(primary_key=True, unique=True)
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
-    password = models.CharField(max_length=128)
-    salt = models.CharField(max_length=4)
-    birth_date = models.DateField()
-    sex = models.CharField(max_length=1, choices=SEX)
-    profile_picture = models.CharField(max_length=512, null=True, blank=True)
-    role = models.CharField(max_length=1, choices=ROLES)
-    created_at = models.DateTimeField(auto_now_add=True)
+from common import CATEGORIES
+from security.models import User
 
 
 class Review(models.Model):
@@ -21,6 +9,7 @@ class Review(models.Model):
 
 
 class ServiceProvider(models.Model):
+    id = models.BigAutoField(primary_key=True, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     business_name = models.CharField(max_length=32)
     description = models.TextField()
@@ -32,12 +21,13 @@ class ServiceProvider(models.Model):
 
 
 class Service(models.Model):
+    id = models.BigAutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=32)
     pictures = models.TextField()
     description = models.TextField()
     price = models.PositiveBigIntegerField(null=True, blank=True)
     category = models.CharField(max_length=2, choices=CATEGORIES)
-    rating = models.BigIntegerField()
+    rating = models.BigIntegerField(default=0)
     provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     reviews = models.ManyToManyField(Review)
     created_at = models.DateTimeField(auto_now_add=True)
