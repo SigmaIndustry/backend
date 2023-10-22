@@ -1,4 +1,5 @@
 import json
+import logging
 from dataclasses import dataclass
 from typing import Callable, Union
 
@@ -44,7 +45,9 @@ class InvalidData:
 def get_data(
     request: WSGIRequest, require: dict[str, Union[type, str]]
 ) -> Union[dict, InvalidData]:
-    print(request.body, request.POST)
+    logger = logging.getLogger("django.request")
+    logger.info(request.body)
+    logger.info(request.POST)
     data = json.loads(request.body or request.POST)
     invalid: dict[str, Union[type, str]] = {}
     for field, field_type in require.items():
