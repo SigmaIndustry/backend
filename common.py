@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass
-from typing import Callable
+from typing import Callable, Union
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.urls import path
@@ -26,7 +26,7 @@ POST = ("POST",)
 
 @dataclass
 class InvalidData:
-    fields: dict[str, type | str]
+    fields: dict[str, Union[type, str]]
 
     def make_response(self):
         return Response(
@@ -42,10 +42,10 @@ class InvalidData:
 
 
 def get_data(
-    request: WSGIRequest, require: dict[str, type | str]
-) -> dict | InvalidData:
+    request: WSGIRequest, require: dict[str, Union[type, str]]
+) -> Union[dict, InvalidData]:
     data = json.loads(request.body)
-    invalid: dict[str, type | str] = {}
+    invalid: dict[str, Union[type, str]] = {}
     for field, field_type in require.items():
         if data.get(field) is None:
             invalid[field] = field_type
