@@ -45,7 +45,7 @@ class InvalidData:
 def get_data(
     request: WSGIRequest, require: dict[str, Union[type, str]]
 ) -> Union[dict, InvalidData]:
-    body = request.body or request.POST.get("_content")
+    body = request.POST.get("_content")
     data = json.loads(body)
     invalid: dict[str, Union[type, str]] = {}
     for field, field_type in require.items():
