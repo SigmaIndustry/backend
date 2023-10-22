@@ -52,3 +52,7 @@ def get_data(
     if invalid:
         return InvalidData(invalid)
     return data
+
+
+def filter_data(data: dict, *names: str):
+    return {k: v for k, v in data.items() if k not in names}
