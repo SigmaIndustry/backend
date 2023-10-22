@@ -10,7 +10,7 @@ class Review(models.Model):
 
 class ServiceProvider(models.Model):
     id = models.BigAutoField(primary_key=True, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     business_name = models.CharField(max_length=32)
     description = models.TextField()
     phone_number = models.CharField(max_length=9)  # +380[phone_number]
