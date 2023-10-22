@@ -1,4 +1,5 @@
 import math
+import re
 from hashlib import sha512
 from secrets import token_hex
 
@@ -134,7 +135,11 @@ def register_provider(request: WSGIRequest):
             {"_description": f"User {data['email']} not found."}, status=404
         )
 
-    provider = ServiceProvider(**filter_data(data, "email"), user=user)
+    provider = ServiceProvider(
+        **filter_data(data, "email", "phone_number"),
+        user=user,
+        phone_number=re.sub(r"^(\+38)?0", "", data["phone_number"]),
+    )
     provider.save()
 
     return Response({"token": user.get_token()}, status=200)
