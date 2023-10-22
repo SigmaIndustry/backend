@@ -6,9 +6,10 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from common import InvalidData, POST, get_data
+from api.models import ServiceProvider
+from common import InvalidData, POST, filter_data, get_data
 from .models import User
-from .serializers import UserSerializer
+from .serializers import ServiceProviderSerializer, UserSerializer
 
 
 def get_entropy(password: str):
@@ -97,4 +98,43 @@ def authenticate(request: WSGIRequest):
     if not user:
         return Response({"_description": "Invalid token."}, status=404)
 
-    return Response({"user": UserSerializer(user).data}, status=200)
+    provider = ServiceProvider.objects.filter(user=user).first()
+
+    return Response(
+        {
+            "user": UserSerializer(user).data,
+            "service_provider": ServiceProviderSerializer(provider).data
+            if provider
+            else None,
+        },
+        status=200,
+    )
+
+
+@api_view(POST)
+def register_provider(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "email": str,
+            "business_name": str,
+            "description": str,
+            "phone_number": str,
+            "city": str,
+            "work_time": str,
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    user = User.objects.filter(email=data["email"]).first()
+    if not user:
+        return Response(
+            {"_description": f"User {data['email']} not found."}, status=404
+        )
+
+    provider = ServiceProvider(**filter_data(data, "email"), user=user)
+    provider.save()
+
+    return Response({"token": user.get_token()}, status=200)
