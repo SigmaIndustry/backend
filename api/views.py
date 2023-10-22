@@ -5,13 +5,13 @@ from rest_framework.response import Response
 from common import CATEGORIES, GET, ROLES, SEX
 
 
+def iterate_enum(enum):
+    return {item[0]: item[1] for item in enum}
+
+
 @api_view(("GET",))
 def index(request):
     return Response({"1": True})
-
-
-def iterate_enum(enum):
-    return {item[0]: item[1] for item in enum}
 
 
 @api_view(GET)
