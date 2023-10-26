@@ -16,7 +16,7 @@ class ServiceProvider(models.Model):
     phone_number = models.CharField(max_length=9)  # +380[phone_number]
     city = models.CharField(max_length=32, null=True, blank=True)
     work_time = models.CharField(max_length=11)  # 09:00-15:00
-    reviews = models.ManyToManyField(Review)
+    reviews = models.ManyToManyField(Review, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -27,7 +27,7 @@ class Service(models.Model):
     description = models.TextField()
     price = models.PositiveBigIntegerField(null=True, blank=True)
     category = models.CharField(max_length=2, choices=CATEGORIES)
-    rating = models.BigIntegerField(default=0)
+    rating = models.FloatField(default=0)
     provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
-    reviews = models.ManyToManyField(Review)
+    reviews = models.ManyToManyField(Review, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -17,16 +17,3 @@ class UserSerializer(serializers.ModelSerializer):
             "role",
             "created_at",
         ]
-
-
-class ServiceProviderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceProvider
-        fields = [
-            "business_name",
-            "description",
-            "phone_number",
-            "city",
-            "work_time",
-            "created_at",
-        ]

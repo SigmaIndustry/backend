@@ -8,9 +8,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.models import ServiceProvider
+from api.serializers import ServiceProviderSerializer
 from common import InvalidData, POST, filter_data, get_data
 from .models import User
-from .serializers import ServiceProviderSerializer, UserSerializer
+from .serializers import UserSerializer
 
 
 def get_entropy(password: str):

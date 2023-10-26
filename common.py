@@ -1,10 +1,8 @@
 import json
-import logging
 from dataclasses import dataclass
-from typing import Callable, Union
+from typing import Union
 
 from django.core.handlers.wsgi import WSGIRequest
-from django.urls import path
 from rest_framework.response import Response
 
 SEX = (
@@ -18,7 +16,7 @@ ROLES = (
     ("G", "Guest"),
 )
 
-CATEGORIES = (("00", "Food"),)
+CATEGORIES = (("00", "Food & Drinks"),)
 
 
 GET = ("GET",)
@@ -48,7 +46,7 @@ def get_data(
     data = json.loads(request.body)
     invalid: dict[str, Union[type, str]] = {}
     for field, field_type in require.items():
-        if data.get(field) is None:
+        if data.get(field) is None and not str(field_type).startswith("?"):
             invalid[field] = field_type
     if invalid:
         return InvalidData(invalid)
