@@ -77,7 +77,7 @@ def search_service(request: WSGIRequest):
 
     # Find using the query
     for service in Service.objects.all():
-        if query in service.name.lower() or query in service.description.lower():
+        if query in service.name.lower():
             matches.add(service)
 
     # Filter
