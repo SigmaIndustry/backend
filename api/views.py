@@ -97,7 +97,7 @@ def search_service(request: WSGIRequest):
             lambda service: bool(len(service.reviews.all()) != 0)
             == bool(data.get("has_reviews"))
         )
-    page = int(data.get("page", 0))
+    page = int(data.get("page", 0)) * 10
 
     return Response(
         {"results": [ServiceSerializer(service).data for service in matches.list[page:page+10]]}
