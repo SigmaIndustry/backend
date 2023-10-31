@@ -98,7 +98,7 @@ def search_service(request: WSGIRequest):
             lambda service: bool(len(service.reviews.all()) != 0)
             == bool(data.get("has_reviews"))
         )
-    page_limit = int(data.get("page_limit", 0))
+    page_limit = int(data.get("page_limit", 1))
     page_offset = int(data.get("page_offset", 0))
 
     return Response(
