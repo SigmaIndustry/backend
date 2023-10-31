@@ -100,5 +100,5 @@ def search_service(request: WSGIRequest):
     page = int(data.get("page", 0)) * 10
 
     return Response(
-        {"results": [ServiceSerializer(service).data for service in matches.list[page:page+10]]}
+        {"size": len(matches.list), "results": [ServiceSerializer(service).data for service in matches.list[page:page+10]]}
     )
