@@ -60,6 +60,7 @@ def search_service(request: WSGIRequest):
         request,
         require={
             "query": str,
+            "page": "?int",
             "min_price": "?int",
             "max_price": "?int",
             "category": "?str",
@@ -96,7 +97,8 @@ def search_service(request: WSGIRequest):
             lambda service: bool(len(service.reviews.all()) != 0)
             == bool(data.get("has_reviews"))
         )
+    page = int(data.get("page", 0))
 
     return Response(
-        {"results": [ServiceSerializer(service).data for service in matches.list]}
+        {"results": [ServiceSerializer(service).data for service in matches.list[page:page+10]]}
     )
