@@ -7,7 +7,14 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from __utils__ import EMAIL_PATTERN, InvalidData, POST, filter_data, get_data
+from __utils__ import (
+    EMAIL_PATTERN,
+    InvalidData,
+    POST,
+    authenticate_token,
+    filter_data,
+    get_data,
+)
 from api.models import ServiceProvider
 from api.serializers import ServiceProviderSerializer
 from .models import User
@@ -98,14 +105,10 @@ def authenticate(request: WSGIRequest):
     if type(data) is InvalidData:
         return data.make_response()
 
-    email, password = data["token"].split(":")
-
-    user = User.objects.filter(email=email, password=password).first()
+    user, provider = authenticate_token(data["token"])
 
     if not user:
         return Response({"_description": "Invalid token."}, status=404)
-
-    provider = ServiceProvider.objects.filter(user=user).first()
 
     return Response(
         {
@@ -113,8 +116,7 @@ def authenticate(request: WSGIRequest):
             "service_provider": ServiceProviderSerializer(provider).data
             if provider
             else None,
-        },
-        status=200,
+        }
     )
 
 
