@@ -7,9 +7,9 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from __utils__ import InvalidData, POST, filter_data, get_data
 from api.models import ServiceProvider
 from api.serializers import ServiceProviderSerializer
-from common import InvalidData, POST, filter_data, get_data
 from .models import User
 from .serializers import UserSerializer
 

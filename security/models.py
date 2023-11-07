@@ -1,6 +1,6 @@
 from django.db import models
 
-from common import ROLES, SEX
+from __utils__ import ROLES, SEX
 
 
 class User(models.Model):

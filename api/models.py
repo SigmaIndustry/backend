@@ -1,6 +1,6 @@
 from django.db import models
 
-from common import CATEGORIES
+from __utils__ import CATEGORIES
 from security.models import User
 
 

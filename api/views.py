@@ -4,8 +4,8 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from __utils__ import CATEGORIES, GET, InvalidData, POST, ROLES, SEX, get_data
 from .models import Service
-from common import CATEGORIES, GET, InvalidData, POST, ROLES, SEX, get_data
 from .serializers import ServiceSerializer
 
 

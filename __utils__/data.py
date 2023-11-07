@@ -5,23 +5,6 @@ from typing import Union
 from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.response import Response
 
-SEX = (
-    ("M", "Male"),
-    ("F", "Female"),
-)
-
-ROLES = (
-    ("A", "Admin"),
-    ("P", "Provider"),
-    ("G", "Guest"),
-)
-
-CATEGORIES = (("00", "Food & Drinks"),)
-
-
-GET = ("GET",)
-POST = ("POST",)
-
 
 @dataclass
 class InvalidData:
