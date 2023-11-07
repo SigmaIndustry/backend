@@ -7,7 +7,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from __utils__ import InvalidData, POST, filter_data, get_data
+from __utils__ import EMAIL_PATTERN, InvalidData, POST, filter_data, get_data
 from api.models import ServiceProvider
 from api.serializers import ServiceProviderSerializer
 from .models import User
@@ -46,11 +46,16 @@ def register(request: WSGIRequest):
     if type(data) is InvalidData:
         return data.make_response()
 
+    if not re.fullmatch(EMAIL_PATTERN, data["email"]):
+        return Response({"_description": "Email is invalid.", "field": "email"}, 400)
+
     if User.objects.filter(email=data["email"]).first():
         return Response({"_description": "User already exists."}, status=409)
 
     if get_entropy(data["password"]) < 50:
-        return Response({"_description": "Password is too weak."}, 400)
+        return Response(
+            {"_description": "Password is too weak.", "field": "password"}, 400
+        )
 
     user = User(**data)
     user.salt, user.password = encrypt_unsalted_password(data["password"])

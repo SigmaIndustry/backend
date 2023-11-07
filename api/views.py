@@ -106,7 +106,7 @@ def search_service(request: WSGIRequest):
             "size": len(matches.list),
             "results": [
                 ServiceSerializer(service).data
-                for service in matches.list[page_offset:page_offset+page_limit]
+                for service in matches.list[page_offset : page_offset + page_limit]
             ],
         }
     )
