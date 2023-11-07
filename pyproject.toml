@@ -5,7 +5,13 @@ description = "Add your description here"
 authors = [
     { name = "Mykhailo Ovcharenko", email = "nuredev@github.com" }
 ]
-dependencies = []
+dependencies = [
+    "Django>=4.2.7",
+    "black>=23.10.1",
+    "django-extensions>=3.2.3",
+    "djangorestframework>=3.14.0",
+    "psycopg2-binary>=2.9.9",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
