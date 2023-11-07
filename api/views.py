@@ -4,8 +4,17 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from __utils__ import CATEGORIES, GET, InvalidData, POST, ROLES, SEX, get_data
-from .models import Service
+from __utils__ import (
+    CATEGORIES,
+    GET,
+    InvalidData,
+    POST,
+    ROLES,
+    SEX,
+    authenticate_token,
+    get_data,
+)
+from .models import Review, Service
 from .serializers import ServiceSerializer
 
 
@@ -110,3 +119,41 @@ def search_service(request: WSGIRequest):
             ],
         }
     )
+
+
+@api_view(POST)
+def rate_service(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "token": str,
+            "service_id": int,
+            "rating": "float >=0 <=5",
+            "?feedback": str,
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    service = Service.objects.filter(id=int(data["service_id"])).first()
+    if not service:
+        return Response(
+            {"_description": "Service not found.", "field": "service_id"}, status=404
+        )
+
+    user, _ = authenticate_token(data["token"])
+
+    if not user:
+        return Response(
+            {"_description": "User not found.", "field": "token"}, status=404
+        )
+
+    rating = Review(
+        user=user,
+        rating=max(min(data["rating"], 5.0), 0.0),
+        feedback=data.get("feedback") or None,
+    )
+    rating.save()
+
+    return Response({"rating_id": rating.id})
