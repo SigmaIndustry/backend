@@ -3,7 +3,6 @@ name = "server"
 version = "0.1.0"
 description = "Add your description here"
 authors = [
-    { name = "Mykhailo Ovcharenko", email = "nuredev@github.com" }
 ]
 dependencies = [
     "Django>=4.2.7",
