@@ -5,7 +5,10 @@ from security.models import User
 
 
 class Review(models.Model):
-    pass
+    id = models.BigAutoField(primary_key=True, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.FloatField(default=0.0)
+    feedback = models.TextField(null=True, blank=True)
 
 
 class ServiceProvider(models.Model):
