@@ -30,7 +30,6 @@ class Service(models.Model):
     description = models.TextField()
     price = models.PositiveBigIntegerField(null=True, blank=True)
     category = models.CharField(max_length=2, choices=CATEGORIES)
-    rating = models.FloatField(default=0)
     provider = models.ForeignKey(
         ServiceProvider, on_delete=models.CASCADE, db_constraint=False
     )
