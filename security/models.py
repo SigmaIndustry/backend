@@ -1,6 +1,6 @@
 from django.db import models
 
-from __utils__ import ROLES, SEX
+from __enums__ import ROLES, SEX
 
 
 class User(models.Model):

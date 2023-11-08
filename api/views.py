@@ -4,13 +4,11 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from __enums__ import (
+    CATEGORIES, GET, POST, ROLES, SEX
+)
 from __utils__ import (
-    CATEGORIES,
-    GET,
     InvalidData,
-    POST,
-    ROLES,
-    SEX,
     authenticate_token,
     get_data,
 )

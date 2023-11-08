@@ -14,6 +14,7 @@ django==4.2.7
 django-extensions==3.2.3
 djangorestframework==3.14.0
 mypy-extensions==1.0.0
+mysqlclient==2.1.1
 packaging==23.2
 pathspec==0.11.2
 platformdirs==3.11.0

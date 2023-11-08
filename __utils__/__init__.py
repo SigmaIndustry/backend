@@ -1,3 +1,2 @@
-from .auth import *
+from .auth import authenticate_token
 from .data import *
-from .enums import *

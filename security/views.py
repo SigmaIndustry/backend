@@ -7,10 +7,9 @@ from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from __enums__ import EMAIL_PATTERN, POST
 from __utils__ import (
-    EMAIL_PATTERN,
     InvalidData,
-    POST,
     authenticate_token,
     filter_data,
     get_data,

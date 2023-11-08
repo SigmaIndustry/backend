@@ -1,8 +1,10 @@
+from typing import Optional
+
 from api.models import ServiceProvider
 from security.models import User
 
 
-def authenticate_token(token: str) -> tuple[User | None, ServiceProvider | None]:
+def authenticate_token(token: str) -> tuple[Optional[User], Optional[ServiceProvider]]:
     email, password = token.split(":")
 
     user = User.objects.filter(email=email, password=password).first()
