@@ -12,16 +12,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = [
-            "id",
-            "name",
-            "pictures",
-            "description",
-            "price",
-            "category",
-            "rating",
-            "provider",
-        ]
+        fields = "__all__"
 
     @staticmethod
     def get_pictures(obj: Service):
