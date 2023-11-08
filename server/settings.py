@@ -82,14 +82,14 @@ DATABASES = {
     "default": {
         # "ENGINE": "django.db.backends.mysql",
         "ENGINE": "django_psdb_engine",
-        "NAME": os.environ.get("DB_NAME"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": os.environ.get("DB_PORT"),
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "NAME": os.environ.get("PLANETSCALE_DB_NAME"),
+        "HOST": os.environ.get("PLANETSCALE_DB_HOST"),
+        "PORT": 3306,
+        "USER": os.environ.get("PLANETSCALE_DB_USER"),
+        "PASSWORD": os.environ.get("PLANETSCALE_DB_PASSWORD"),
         "OPTIONS": {
             "charset": "utf8mb4",
-            "ssl": {"ca": os.environ.get("MYSQL_ATTR_SSL_CA")},
+            "ssl": {"ca": os.environ.get("PLANETSCALE_SSL_CERT_PATH")},
         },
     }
 }
