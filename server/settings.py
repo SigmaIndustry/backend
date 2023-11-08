@@ -85,7 +85,7 @@ DATABASES = {
         "NAME": os.environ.get("PLANETSCALE_DB_NAME"),
         "HOST": os.environ.get("PLANETSCALE_DB_HOST"),
         "PORT": 3306,
-        "USER": os.environ.get("PLANETSCALE_DB_USER"),
+        "USER": os.environ.get("PLANETSCALE_DB_USERNAME"),
         "PASSWORD": os.environ.get("PLANETSCALE_DB_PASSWORD"),
         "OPTIONS": {
             "charset": "utf8mb4",
