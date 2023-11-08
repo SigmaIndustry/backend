@@ -31,6 +31,8 @@ class Service(models.Model):
     price = models.PositiveBigIntegerField(null=True, blank=True)
     category = models.CharField(max_length=2, choices=CATEGORIES)
     rating = models.FloatField(default=0)
-    provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, db_constraint=False)
+    provider = models.ForeignKey(
+        ServiceProvider, on_delete=models.CASCADE, db_constraint=False
+    )
     reviews = models.ManyToManyField(Review, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

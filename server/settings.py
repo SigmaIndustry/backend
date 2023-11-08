@@ -88,9 +88,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "OPTIONS": {
             "charset": "utf8mb4",
-            "ssl": {
-                "ca": os.environ.get("MYSQL_ATTR_SSL_CA")
-            }
+            "ssl": {"ca": os.environ.get("MYSQL_ATTR_SSL_CA")},
         },
     }
 }
