@@ -9,7 +9,10 @@ ROLES = (
     ("G", "Guest"),
 )
 
-CATEGORIES = (("00", "Food & Drinks"),)
+CATEGORIES = (
+    ("00", "Food & Drinks"),
+    ("01", "Car service"),
+)
 
 
 GET = ("GET",)

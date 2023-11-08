@@ -29,7 +29,9 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_rating(obj: Service):
-        return statistics.median([review.rating for review in obj.reviews.all()] or [0.0])
+        return statistics.median(
+            [review.rating for review in obj.reviews.all()] or [0.0]
+        )
 
 
 class ServiceProviderSerializer(serializers.ModelSerializer):

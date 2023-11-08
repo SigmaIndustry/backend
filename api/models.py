@@ -28,7 +28,7 @@ class Service(models.Model):
     name = models.CharField(max_length=32)
     pictures = models.TextField()
     description = models.TextField()
-    price = models.PositiveBigIntegerField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
     category = models.CharField(max_length=2, choices=CATEGORIES)
     provider = models.ForeignKey(
         ServiceProvider, on_delete=models.CASCADE, db_constraint=False
