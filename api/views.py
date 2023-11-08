@@ -125,7 +125,7 @@ def rate_service(request: WSGIRequest):
             "token": str,
             "service_id": int,
             "rating": "float >=0 <=5",
-            "?feedback": str,
+            "feedback": "?str",
         },
     )
 
