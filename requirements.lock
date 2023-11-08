@@ -8,11 +8,11 @@
 
 -e file:.
 asgiref==3.7.2
+dj-database-url==2.1.0
 django==4.2.7
 django-extensions==3.2.3
 djangorestframework==3.14.0
-mysqlclient==2.1.1
-psycopg2-binary==2.9.9
+pymysql==1.1.0
 pytz==2023.3.post1
 sqlparse==0.4.4
 typing-extensions==4.8.0

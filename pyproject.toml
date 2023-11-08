@@ -7,9 +7,9 @@ authors = [
 dependencies = [
     "django-extensions>=3.2.3",
     "djangorestframework>=3.14.0",
-    "psycopg2-binary>=2.9.9",
-    "mysqlclient==2.1.1",
     "Django>=4.2.7",
+    "pymysql>=1.1.0",
+    "dj_database_url>=2.1.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
