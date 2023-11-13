@@ -3,7 +3,8 @@ from typing import Callable
 from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from django.conf import settings
+from django.core.mail import EmailMessage, send_mail
 from __enums__ import CATEGORIES, GET, POST, ROLES, SEX
 from __utils__ import (
     InvalidData,
@@ -186,3 +187,50 @@ def create_service(request: WSGIRequest):
     service.save()
 
     return Response(ServiceSerializer(service).data)
+
+
+@api_view(POST)
+def order_service(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={"token": str, "service_id": "str", "message": "str"},
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    user, _ = authenticate_token(data["token"])
+
+    if not user:
+        return Response(
+            {"_description": "User not found.", "field": "token"}, status=404
+        )
+
+    service = Service.objects.filter(id=data["service_id"]).first()
+
+    if not service:
+        return Response(
+            {"_description": "Service not found.", "field": "service"}, status=404
+        )
+
+    msg = f"""
+    <!DOCTYPE html>
+    <html>
+    <body style="font-size: 1.25rem;">
+    <table style="border: none; width: fit-content; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 1rem 0;">You have a new order from {user.first_name} {user.last_name} on your service
+            <a href="{request.build_absolute_uri("/service/" + str(service.id))}">{service.name}</a>.</td>
+        </tr>
+        <tr><td style="padding: 1rem 0;"><h3 style="margin: 0;">They left the following message:</h3></td></tr>
+        <tr><td style="padding: 1rem 0;"><q style="border-left: 4px solid black; padding: 1rem;">{data["message"]}</q></td></tr>
+        <tr style="font-size: 0.75rem;"><td style="padding: 1rem 0;">SigmaIndustry © 2023</td></tr>
+    </table>
+    </body>
+    </html>
+    """
+    mail = EmailMessage(f"New order of {service.name}", msg, settings.EMAIL_HOST_USER, [user.email])
+    mail.content_subtype = "html"
+    mail.send()
+
+    return Response({})
