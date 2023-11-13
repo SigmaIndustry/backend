@@ -204,6 +204,8 @@ def update(request: WSGIRequest):
     ).items():
         setattr(user, key, value)
 
+    if data.get("password"):
+        user.salt, user.password = encrypt_unsalted_password(data["password"])
     user.save()
 
     return Response(
