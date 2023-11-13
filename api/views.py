@@ -8,9 +8,10 @@ from __enums__ import CATEGORIES, GET, POST, ROLES, SEX
 from __utils__ import (
     InvalidData,
     authenticate_token,
+    filter_data,
     get_data,
 )
-from .models import Review, Service
+from .models import Review, Service, ServiceProvider
 from .serializers import ServiceSerializer
 
 
@@ -153,3 +154,35 @@ def rate_service(request: WSGIRequest):
     rating.save()
 
     return Response({"rating_id": rating.id})
+
+
+@api_view(POST)
+def create_service(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "provider_id": int,
+            "name": str,
+            "pictures": "list[str]",
+            "description": "?str",
+            "price": float,
+            "category": str,
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    provider = ServiceProvider.objects.filter(id=data["provider_id"]).first()
+
+    if not provider:
+        return Response({"_description": "Provider not found."}, status=404)
+
+    service = Service(
+        provider=data["provider_id"],
+        pictures=";".join(data["pictures"]),
+        **filter_data(data, "provider_id", "pictures"),
+    )
+    service.save()
+
+    return Response(ServiceSerializer(service).data)
