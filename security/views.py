@@ -150,3 +150,67 @@ def register_provider(request: WSGIRequest):
     provider.save()
 
     return Response({"token": user.get_token()}, status=200)
+
+
+@api_view(POST)
+def update(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "token": str,
+            "email": "?str",
+            "password": "?str",
+            "first_name": "?str",
+            "last_name": "?str",
+            "birth_date": "?YYYY-MM-DD",
+            "sex": "?str",
+            "profile_picture": "?str",
+            "role": "?str",
+            # Provider:
+            "business_name": "?str",
+            "description": "?str",
+            "phone_number": "?str",
+            "city": "?str",
+            "work_time": "?str",
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    user, provider = authenticate_token(data["token"])
+
+    if not user:
+        return Response({"_description": "Invalid token."}, status=404)
+
+    if provider:
+        for key, value in filter_data(
+            data,
+            "token",
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "birth_date",
+            "sex",
+            "profile_picture",
+            "role",
+        ).items():
+            setattr(provider, key, value)
+        provider.save()
+
+    for key, value in filter_data(
+        data, "business_name", "description", "phone_number", "city", "work_time"
+    ).items():
+        setattr(user, key, value)
+
+    user.save()
+
+    return Response(
+        {
+            "user": UserSerializer(user).data,
+            "service_provider": ServiceProviderSerializer(provider).data
+            if provider
+            else None,
+        }
+    )

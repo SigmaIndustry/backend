@@ -7,4 +7,5 @@ urlpatterns = [
     path("register_provider", register_provider, name="Register service provider"),
     path("login", login, name="Login user"),
     path("authenticate", authenticate, name="Authenticate user using token"),
+    path("update", update),
 ]
