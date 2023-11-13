@@ -214,3 +214,24 @@ def update(request: WSGIRequest):
             else None,
         }
     )
+
+
+@api_view(POST)
+def get_provider(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "provider_id": int,
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    provider = ServiceProvider.objects.filter(id=data["provider_id"]).first()
+
+    if not provider:
+        return Response({"_description": "Provider not found."}, status=404)
+
+    return Response(ServiceProviderSerializer(provider).data)
+
