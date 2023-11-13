@@ -234,4 +234,3 @@ def get_provider(request: WSGIRequest):
         return Response({"_description": "Provider not found."}, status=404)
 
     return Response(ServiceProviderSerializer(provider).data)
-
