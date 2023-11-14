@@ -1,3 +1,4 @@
+import threading
 from typing import Callable
 
 from django.core.handlers.wsgi import WSGIRequest
@@ -14,6 +15,10 @@ from __utils__ import (
 )
 from .models import Review, Service, ServiceProvider
 from .serializers import ServiceSerializer
+
+
+def send_mail_message(mail):
+    mail.send()
 
 
 def iterate_enum(enum):
@@ -229,8 +234,12 @@ def order_service(request: WSGIRequest):
     </body>
     </html>
     """
-    mail = EmailMessage(f"New order of {service.name}", msg, settings.EMAIL_HOST_USER, [user.email])
+    mail = EmailMessage(
+        f"New order of {service.name}", msg, settings.EMAIL_HOST_USER, [user.email]
+    )
     mail.content_subtype = "html"
-    mail.send()
+
+    thread = threading.Thread(target=send_mail_message, args=(mail,))
+    thread.start()
 
     return Response({})
