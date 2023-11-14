@@ -17,10 +17,6 @@ from .models import Review, Service, ServiceProvider
 from .serializers import ServiceSerializer
 
 
-def send_mail_message(mail):
-    mail.send()
-
-
 def iterate_enum(enum):
     return {item[0]: item[1] for item in enum}
 
@@ -238,8 +234,6 @@ def order_service(request: WSGIRequest):
         f"New order of {service.name}", msg, settings.EMAIL_HOST_USER, [user.email]
     )
     mail.content_subtype = "html"
-
-    thread = threading.Thread(target=send_mail_message, args=(mail,))
-    thread.start()
+    mail.send()
 
     return Response({})
