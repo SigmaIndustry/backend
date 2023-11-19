@@ -154,7 +154,7 @@ def rate_service(request: WSGIRequest):
         feedback=data.get("feedback") or None,
     )
     rating.save()
-    service.rating.add(rating)
+    service.reviews.add(rating)
 
     return Response({"rating_id": rating.id})
 
