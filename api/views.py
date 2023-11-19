@@ -99,7 +99,7 @@ def search_service(request: WSGIRequest):
         matches.filter(lambda service: service.category == data.get("category"))
 
     if data.get("min_rating"):
-        matches.filter(lambda service: service.rating >= data.get("min_rating"))
+        matches.filter(lambda service: service.get_rating() >= data.get("min_rating"))
 
     if data.get("has_reviews"):
         matches.filter(

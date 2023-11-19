@@ -1,6 +1,3 @@
-import math
-import statistics
-
 from rest_framework import serializers
 
 from .models import Service, ServiceProvider
@@ -20,9 +17,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_rating(obj: Service):
-        return statistics.median(
-            [review.rating for review in obj.reviews.all()] or [0.0]
-        )
+        return obj.get_rating()
 
 
 class ServiceProviderSerializer(serializers.ModelSerializer):

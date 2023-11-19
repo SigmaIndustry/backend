@@ -1,3 +1,5 @@
+import statistics
+
 from django.db import models
 
 from __enums__ import CATEGORIES
@@ -35,3 +37,8 @@ class Service(models.Model):
     )
     reviews = models.ManyToManyField(Review, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_rating(self):
+        return statistics.median(
+            [review.rating for review in self.reviews.all()] or [0.0]
+        )
