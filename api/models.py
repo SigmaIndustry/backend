@@ -42,3 +42,10 @@ class Service(models.Model):
         return statistics.median(
             [review.rating for review in self.reviews.all()] or [0.0]
         )
+
+
+class OrderHistoryEntry(models.Model):
+    email = models.EmailField(primary_key=True, unique=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    message = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

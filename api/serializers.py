@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Service, ServiceProvider
+from .models import OrderHistoryEntry, Service, ServiceProvider
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -31,3 +31,9 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             "work_time",
             "created_at",
         ]
+
+
+class OrderHistoryEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderHistoryEntry
+        fields = "__all__"

@@ -11,4 +11,5 @@ urlpatterns = [
     path("enum/sex", sex, name="Sex enums"),
     path("enum/roles", roles, name="Role enums"),
     path("enum/categories", categories, name="Category enums"),
+    path("get_history/<str:email>", get_history),
 ]

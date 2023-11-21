@@ -2,6 +2,7 @@ import threading
 from typing import Callable
 
 from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import QuerySet
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.conf import settings
@@ -13,8 +14,8 @@ from __utils__ import (
     filter_data,
     get_data,
 )
-from .models import Review, Service, ServiceProvider
-from .serializers import ServiceSerializer
+from .models import OrderHistoryEntry, Review, Service, ServiceProvider
+from .serializers import OrderHistoryEntrySerializer, ServiceSerializer
 
 
 def iterate_enum(enum):
@@ -237,4 +238,23 @@ def order_service(request: WSGIRequest):
     mail.content_subtype = "html"
     mail.send()
 
+    entry = OrderHistoryEntry(
+        email=user.email, service=service, message=data["message"]
+    )
+    entry.save()
+
     return Response({})
+
+
+@api_view(GET)
+def get_history(request: WSGIRequest, email: str):
+    entry: QuerySet[OrderHistoryEntry] = (
+        OrderHistoryEntry.objects.filter(email=email).order_by("created_at").all()
+    )
+
+    if not entry:
+        return Response({"entries": []})
+
+    return Response(
+        {"entries": [OrderHistoryEntrySerializer(item).data for item in entry]}
+    )
