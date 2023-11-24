@@ -9,4 +9,5 @@ urlpatterns = [
     path("authenticate", authenticate, name="Authenticate user using token"),
     path("update", update),
     path("get_provider", get_provider),
+    path("ban", ban),
 ]

@@ -13,6 +13,8 @@ class User(models.Model):
     sex = models.CharField(max_length=1, choices=SEX)
     profile_picture = models.CharField(max_length=512, null=True, blank=True)
     role = models.CharField(max_length=1, choices=ROLES)
+    is_admin = models.BooleanField(default=False)
+    is_banned = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_token(self):

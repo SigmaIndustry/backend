@@ -109,6 +109,9 @@ def authenticate(request: WSGIRequest):
     if not user:
         return Response({"_description": "Invalid token."}, status=404)
 
+    if user.is_banned:
+        return Response({"_description": "You are banned."}, status=403)
+
     return Response(
         {
             "user": UserSerializer(user).data,
@@ -236,3 +239,33 @@ def get_provider(request: WSGIRequest):
         return Response({"_description": "Provider not found."}, status=404)
 
     return Response(ServiceProviderSerializer(provider).data)
+
+
+@api_view(POST)
+def ban(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "token": str,
+            "email": str,
+            "reason": "?str",
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    request_user, _ = authenticate_token(data["token"])
+    if not request_user.is_admin:
+        return Response({"_description": "No permission."}, status=403)
+
+    user = User.objects.filter(email=data["email"]).first()
+    if not user:
+        return Response(
+            {"_description": "User not found.", "field": "token"}, status=404
+        )
+
+    user.is_banned = True
+    user.save()
+
+    return Response({})
