@@ -258,3 +258,20 @@ def get_history(request: WSGIRequest, email: str):
     return Response(
         {"entries": [OrderHistoryEntrySerializer(item).data for item in entry]}
     )
+
+
+@api_view(GET)
+def service_of_provider(request: WSGIRequest, provider_id: int):
+    provider = ServiceProvider.objects.filter(id=provider_id).first()
+
+    if not provider:
+        return Response({}, status=404)
+
+    services = Service.objects.filter(provider=provider).all()
+
+    if not services:
+        return Response({"entries": []})
+
+    return Response(
+        {"entries": [ServiceSerializer(item).data for item in services]}
+    )

@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     path("", index),
+    path("service/list/@<provider_id>", service_of_provider),
     path("service/search", search_service),
     path("service/rate", rate_service),
     path("service/create", create_service),
