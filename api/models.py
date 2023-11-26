@@ -30,9 +30,6 @@ class ServiceProvider(models.Model):
     city = models.CharField(max_length=32, null=True, blank=True)
     work_time = models.CharField(max_length=11)  # 09:00-15:00
     reviews = models.ManyToManyField(Review, blank=True)
-    geolocation = models.ForeignKey(
-        Geolocation, on_delete=models.SET_NULL, null=True, blank=True
-    )
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -47,6 +44,9 @@ class Service(models.Model):
         ServiceProvider, on_delete=models.CASCADE, db_constraint=False
     )
     reviews = models.ManyToManyField(Review, blank=True)
+    geolocation = models.ForeignKey(
+        Geolocation, on_delete=models.SET_NULL, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_rating(self):

@@ -3,10 +3,17 @@ from rest_framework import serializers
 from .models import Geolocation, OrderHistoryEntry, Service, ServiceProvider
 
 
+class GeolocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Geolocation
+        fields = "__all__"
+
+
 class ServiceSerializer(serializers.ModelSerializer):
     pictures = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
+    geolocation = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -24,16 +31,14 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_reviews(obj: Service):
         return None
 
-
-class GeolocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Geolocation
-        fields = "__all__"
+    @staticmethod
+    def get_geolocation(obj: Service):
+        if not obj.geolocation:
+            return None
+        return GeolocationSerializer(obj.geolocation).data
 
 
 class ServiceProviderSerializer(serializers.ModelSerializer):
-    geolocation = serializers.SerializerMethodField()
-
     class Meta:
         model = ServiceProvider
         fields = [
@@ -42,15 +47,8 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             "phone_number",
             "city",
             "work_time",
-            "geolocation",
             "created_at",
         ]
-
-    @staticmethod
-    def get_geolocation(obj: ServiceProvider):
-        if not obj.geolocation:
-            return None
-        return GeolocationSerializer(obj.geolocation).data
 
 
 class OrderHistoryEntrySerializer(serializers.ModelSerializer):

@@ -289,13 +289,22 @@ def service_of_provider(request: WSGIRequest, provider_id: int):
 def add_geolocation(request: WSGIRequest):
     data = get_data(
         request,
-        require={"token": str, "latitude": float, "longitude": float},
+        require={
+            "token": str,
+            "service_id": int,
+            "latitude": float,
+            "longitude": float,
+        },
     )
 
     if type(data) is InvalidData:
         return data.make_response()
 
     user, provider = authenticate_token(data["token"])
+    service = Service.objects.filter(id=data["service_id"]).first()
+
+    if not service:
+        return Response({}, status=404)
 
     if not provider:
         return Response({}, status=403)
@@ -312,7 +321,7 @@ def add_geolocation(request: WSGIRequest):
         longitude=data["longitude"],
     )
     geolocation.save()
-    provider.geolocation = geolocation
-    provider.save()
+    service.geolocation = geolocation
+    service.save()
 
-    return Response({"provider": ServiceProviderSerializer(provider).data})
+    return Response({"service": ServiceSerializer(service).data})
