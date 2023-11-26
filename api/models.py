@@ -13,6 +13,14 @@ class Review(models.Model):
     feedback = models.TextField(null=True, blank=True)
 
 
+class Geolocation(models.Model):
+    country = models.CharField(max_length=32)
+    region = models.CharField(max_length=32)
+    city = models.CharField(max_length=32)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+
 class ServiceProvider(models.Model):
     id = models.BigAutoField(primary_key=True, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -22,6 +30,9 @@ class ServiceProvider(models.Model):
     city = models.CharField(max_length=32, null=True, blank=True)
     work_time = models.CharField(max_length=11)  # 09:00-15:00
     reviews = models.ManyToManyField(Review, blank=True)
+    geolocation = models.ForeignKey(
+        Geolocation, on_delete=models.SET_NULL, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
 

@@ -9,6 +9,7 @@ urlpatterns = [
     path("service/rate", rate_service),
     path("service/create", create_service),
     path("service/order", order_service),
+    path("add_geolocation", add_geolocation),
     path("enum/sex", sex, name="Sex enums"),
     path("enum/roles", roles, name="Role enums"),
     path("enum/categories", categories, name="Category enums"),

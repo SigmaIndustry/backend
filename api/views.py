@@ -1,6 +1,9 @@
 import threading
 from typing import Callable
 
+from geopy import Location
+from geopy.geocoders import Nominatim
+
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import QuerySet
 from rest_framework.decorators import api_view
@@ -14,8 +17,15 @@ from __utils__ import (
     filter_data,
     get_data,
 )
-from .models import OrderHistoryEntry, Review, Service, ServiceProvider
-from .serializers import OrderHistoryEntrySerializer, ServiceSerializer
+from .models import Geolocation, OrderHistoryEntry, Review, Service, ServiceProvider
+from .serializers import (
+    OrderHistoryEntrySerializer,
+    ServiceProviderSerializer,
+    ServiceSerializer,
+)
+
+
+GEOLOCATOR = Nominatim(user_agent="sigma-industry")
 
 
 def iterate_enum(enum):
@@ -272,6 +282,37 @@ def service_of_provider(request: WSGIRequest, provider_id: int):
     if not services:
         return Response({"entries": []})
 
-    return Response(
-        {"entries": [ServiceSerializer(item).data for item in services]}
+    return Response({"entries": [ServiceSerializer(item).data for item in services]})
+
+
+@api_view(POST)
+def add_geolocation(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={"token": str, "latitude": float, "longitude": float},
     )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    user, provider = authenticate_token(data["token"])
+
+    if not provider:
+        return Response({}, status=403)
+
+    location: Location = GEOLOCATOR.reverse(
+        ",".join([str(data["latitude"]), str(data["longitude"])])
+    )
+
+    geolocation = Geolocation(
+        country=location.raw["address"]["country"],
+        region=location.raw["address"]["state"],
+        city=location.raw["address"]["city"],
+        latitude=data["latitude"],
+        longitude=data["longitude"],
+    )
+    geolocation.save()
+    provider.geolocation = geolocation
+    provider.save()
+
+    return Response({"provider": ServiceProviderSerializer(provider).data})
