@@ -21,9 +21,18 @@ class Migration(migrations.Migration):
             name="OrderHistoryEntry",
             fields=[
                 (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
                     "email",
                     models.EmailField(
-                        max_length=254, primary_key=True, serialize=False, unique=True
+                        max_length=254, serialize=False
                     ),
                 ),
                 ("message", models.TextField(blank=True)),

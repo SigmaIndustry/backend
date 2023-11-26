@@ -56,7 +56,7 @@ class Service(models.Model):
 
 
 class OrderHistoryEntry(models.Model):
-    email = models.EmailField(primary_key=True, unique=True)
+    email = models.EmailField()
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     message = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
