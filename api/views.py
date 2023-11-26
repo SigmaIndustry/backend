@@ -246,7 +246,8 @@ def order_service(request: WSGIRequest):
         f"New order of {service.name}", msg, settings.EMAIL_HOST_USER, [user.email]
     )
     mail.content_subtype = "html"
-    mail.send()
+    if data.get("do_send_mail"):
+        mail.send()
 
     entry = OrderHistoryEntry(
         email=user.email, service=service, message=data["message"]
