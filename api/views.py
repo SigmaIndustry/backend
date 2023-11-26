@@ -1,6 +1,7 @@
 import threading
 from typing import Callable
 
+from django.utils import timezone
 from geopy import Location
 from geopy.geocoders import Nominatim
 
@@ -252,6 +253,7 @@ def order_service(request: WSGIRequest):
     entry = OrderHistoryEntry(
         email=user.email, service=service, message=data["message"]
     )
+    entry.created_at = timezone.now()
     entry.save()
 
     return Response({})
