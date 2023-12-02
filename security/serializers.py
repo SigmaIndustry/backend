@@ -18,6 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
             "sex",
             "profile_picture",
             "role",
+            "is_admin",
+            "is_banned",
             "created_at",
         ]
 
