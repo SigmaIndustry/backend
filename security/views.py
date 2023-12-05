@@ -5,19 +5,21 @@ from secrets import token_hex
 
 from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from __enums__ import EMAIL_PATTERN, POST
-from __utils__ import (
-    InvalidData,
-    authenticate_token,
-    filter_data,
-    get_data,
-)
+from __utils__ import InvalidData, authenticate_token, filter_data, get_data
 from api.models import ServiceProvider
 from api.serializers import ServiceProviderSerializer
+
 from .models import User
 from .serializers import UserSerializer
+
+
+class UserApiView(ListAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
 def get_entropy(password: str):

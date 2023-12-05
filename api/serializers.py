@@ -42,6 +42,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
         fields = [
+            "id",
             "business_name",
             "description",
             "phone_number",

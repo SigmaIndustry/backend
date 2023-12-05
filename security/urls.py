@@ -10,4 +10,5 @@ urlpatterns = [
     path("update", update),
     path("get_provider", get_provider),
     path("ban", ban),
+    path("all_users", UserApiView.as_view()),
 ]
