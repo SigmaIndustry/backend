@@ -1,6 +1,11 @@
 from django.urls import path
+from rest_framework import routers
 
 from .views import *
+
+router = routers.SimpleRouter()
+router.register(r"users", UserApiView)
+
 
 urlpatterns = [
     path("register", register, name="Register user"),
@@ -10,5 +15,4 @@ urlpatterns = [
     path("update", update),
     path("get_provider", get_provider),
     path("ban", ban),
-    path("all_users", UserApiView.as_view()),
-]
+] + router.urls
