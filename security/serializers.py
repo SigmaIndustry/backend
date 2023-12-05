@@ -11,8 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "id",
+        fields = (
             "email",
             "first_name",
             "last_name",
@@ -23,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_admin",
             "is_banned",
             "created_at",
-        ]
+        )
 
     @staticmethod
     def get_sex(obj: User):
