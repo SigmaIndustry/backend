@@ -8,6 +8,7 @@ urlpatterns = [
     path("service/search", search_service),
     path("service/rate", rate_service),
     path("service/create", create_service),
+    path("service/delete", delete_service),
     path("service/order", order_service),
     path("add_geolocation", add_geolocation),
     path("enum/sex", sex, name="Sex enums"),

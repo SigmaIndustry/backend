@@ -204,6 +204,28 @@ def create_service(request: WSGIRequest):
 
 
 @api_view(POST)
+def delete_service(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "service_id": int,
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    service = Service.objects.filter(id=data["service_id"]).first()
+
+    if not service:
+        return Response({"_description": "Service not found."}, status=404)
+
+    service.delete()
+
+    return Response({})
+
+
+@api_view(POST)
 def order_service(request: WSGIRequest):
     data = get_data(
         request,
