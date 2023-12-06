@@ -194,7 +194,7 @@ def create_service(request: WSGIRequest):
         return Response({"_description": "Provider not found."}, status=404)
 
     service = Service(
-        provider=data["provider_id"],
+        provider=provider,
         pictures=";".join(data["pictures"]),
         **filter_data(data, "provider_id", "pictures"),
     )
