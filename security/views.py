@@ -271,3 +271,32 @@ def ban(request: WSGIRequest):
     user.save()
 
     return Response({})
+
+
+@api_view(POST)
+def unban(request: WSGIRequest):
+    data = get_data(
+        request,
+        require={
+            "token": str,
+            "email": str,
+        },
+    )
+
+    if type(data) is InvalidData:
+        return data.make_response()
+
+    request_user, _ = authenticate_token(data["token"])
+    if not request_user.is_admin:
+        return Response({"_description": "No permission."}, status=403)
+
+    user = User.objects.filter(email=data["email"]).first()
+    if not user:
+        return Response(
+            {"_description": "User not found.", "field": "token"}, status=404
+        )
+
+    user.is_banned = False
+    user.save()
+
+    return Response({})

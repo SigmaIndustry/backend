@@ -15,4 +15,5 @@ urlpatterns = [
     path("update", update),
     path("get_provider", get_provider),
     path("ban", ban),
+    path("unban", unban),
 ] + router.urls
